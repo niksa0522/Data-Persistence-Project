@@ -12,6 +12,8 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+
+    public Text HighScoreText;
     
     private bool m_Started = false;
     private int m_Points;
@@ -22,6 +24,7 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        HighScoreText.text = "Best Score: " + PersistenceManager.Instance.Score + " by: " + PersistenceManager.Instance.BestName;
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -57,7 +60,7 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SceneManager.LoadScene(0);
             }
         }
     }
@@ -66,6 +69,12 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+        if (m_Points > PersistenceManager.Instance.Score)
+        {
+            PersistenceManager.Instance.Score = m_Points;
+            PersistenceManager.Instance.BestName = PersistenceManager.Instance.Name;
+            HighScoreText.text = "Best Score: " + PersistenceManager.Instance.Score + " by: " + PersistenceManager.Instance.BestName;
+        }
     }
 
     public void GameOver()
